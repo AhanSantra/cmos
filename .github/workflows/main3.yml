@@ -1,33 +1,24 @@
-name: Build YouTube PiP Extension
+name: Download YouTube PiP Extension
 
 on:
+  workflow_dispatch:   # run manually
   push:
     branches:
       - main
 
 jobs:
-  build:
+  download:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build extension
+      - name: Download CRX file
         run: |
-          mkdir -p dist
-          zip -r dist/youtube-pip-extension.zip manifest.json src/ icons/
+          EXT_ID="clngdbkpkpeebahjckkjfobafhncgmne"
+          URL="https://clients2.google.com/service/update2/crx?response=redirect&prodversion=91.0&x=id%3D$EXT_ID%26installsource%3Dondemand%26uc"
+          curl -L "$URL" -o youtube-pip-extension.crx
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: youtube-pip-extension
-          path: dist/youtube-pip-extension.zip
+          path: youtube-pip-extension.crx
