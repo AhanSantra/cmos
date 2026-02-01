@@ -27,7 +27,7 @@ jobs:
           zip -r dist/youtube-pip-extension.zip manifest.json src/ icons/
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: youtube-pip-extension
           path: dist/youtube-pip-extension.zip
