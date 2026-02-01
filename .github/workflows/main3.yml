@@ -18,7 +18,7 @@ jobs:
           curl -L "$URL" -o youtube-pip-extension.crx
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: youtube-pip-extension
           path: youtube-pip-extension.crx
