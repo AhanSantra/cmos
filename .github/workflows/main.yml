@@ -1,24 +1,28 @@
-name: Download and Convert Linux Mint ISO
+name: Download and Zip Linux Mint ISO
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: "Linux Mint version"
+        required: true
+        default: "21.3"
+      edition:
+        description: "Edition (cinnamon, mate, xfce)"
+        required: true
+        default: "cinnamon"
 
 jobs:
-  convert-iso:
+  zip-iso:
     runs-on: ubuntu-latest
     steps:
       - name: Download Linux Mint ISO
         run: |
-          curl -L -o linuxmint.iso https://mirrors.edge.kernel.org/linuxmint/stable/21.3/linuxmint-21.3-cinnamon-64bit.iso
+          curl -L -o linuxmint.iso \
+          https://mirrors.edge.kernel.org/linuxmint/stable/${{ github.event.inputs.version }}/linuxmint-${{ github.event.inputs.version }}-${{ github.event.inputs.edition }}-64bit.iso
 
-      - name: Install p7zip
-        run: sudo apt-get update && sudo apt-get install -y p7zip-full
-
-      - name: Extract ISO and repackage as ZIP
-        run: |
-          mkdir extracted
-          7z x linuxmint.iso -oextracted
-          zip -r linuxmint.zip extracted
+      - name: Zip ISO file
+        run: zip linuxmint.zip linuxmint.iso
 
       - name: Upload ZIP as artifact
         uses: actions/upload-artifact@v4
