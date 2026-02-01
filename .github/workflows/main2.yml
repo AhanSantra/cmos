@@ -10,9 +10,9 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Download EasyBCD installer
+      - name: Download EasyBCD installer from SourceForge
         run: |
-          curl -L -o EasyBCD.exe "https://neosmart.net/EasyBCD/EasyBCD%20Community%20Edition.exe"
+          curl -L -o EasyBCD.exe "https://sourceforge.net/projects/easybcd/files/latest/download"
 
       - name: Upload installer as artifact
         uses: actions/upload-artifact@v4
