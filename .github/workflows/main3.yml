@@ -1,4 +1,4 @@
-name: Download YouTube PiP Extension
+name: Download Google PiP Extension
 
 on:
   workflow_dispatch:   # run manually
@@ -13,12 +13,13 @@ jobs:
     steps:
       - name: Download CRX file
         run: |
-          EXT_ID="clngdbkpkpeebahjckkjfobafhncgmne"
-          URL="https://clients2.google.com/service/update2/crx?response=redirect&prodversion=91.0&x=id%3D$EXT_ID%26installsource%3Dondemand%26uc"
-          curl -L "$URL" -o youtube-pip-extension.crx
+          EXT_ID="hkgfoiooedgoejojocmhlaklaeopbecg"
+          URL="https://clients2.google.com/service/update2/crx?response=redirect&prodversion=120.0&x=id%3D$EXT_ID%26installsource%3Dondemand%26uc"
+          curl -L "$URL" -o picture-in-picture.crx
+          ls -lh picture-in-picture.crx
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: youtube-pip-extension
-          path: youtube-pip-extension.crx
+          name: google-pip-extension
+          path: picture-in-picture.crx
