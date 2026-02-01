@@ -1,0 +1,27 @@
+name: Download and Convert Linux Mint ISO
+
+on:
+  workflow_dispatch:
+
+jobs:
+  convert-iso:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Linux Mint ISO
+        run: |
+          curl -L -o linuxmint.iso https://mirrors.edge.kernel.org/linuxmint/stable/21.3/linuxmint-21.3-cinnamon-64bit.iso
+
+      - name: Install p7zip
+        run: sudo apt-get update && sudo apt-get install -y p7zip-full
+
+      - name: Extract ISO and repackage as ZIP
+        run: |
+          mkdir extracted
+          7z x linuxmint.iso -oextracted
+          zip -r linuxmint.zip extracted
+
+      - name: Upload ZIP as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: linuxmint-zip
+          path: linuxmint.zip
