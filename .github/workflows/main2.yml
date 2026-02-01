@@ -1,0 +1,21 @@
+name: Download EasyBCD
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Download EasyBCD installer
+        run: |
+          curl -L -o EasyBCD.exe "https://neosmart.net/EasyBCD/EasyBCD%20Community%20Edition.exe"
+
+      - name: Upload installer as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: EasyBCD-installer
+          path: EasyBCD.exe
