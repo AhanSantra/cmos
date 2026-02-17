@@ -1,0 +1,26 @@
+name: Download and Upload Python Artifact
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup-python:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Download Python embeddable ZIP (Windows example shown)
+      - name: Download Python
+        run: |
+          curl -L https://www.python.org/ftp/python/3.12.2/python-3.12.2-embed-amd64.zip -o python.zip
+
+      # Step 2: Unzip
+      - name: Extract Python
+        run: |
+          mkdir python
+          unzip python.zip -d python
+
+      # Step 3: Upload as artifact
+      - name: Upload Python Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-embed
+          path: python
