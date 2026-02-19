@@ -21,7 +21,7 @@ jobs:
           ls -lh driver
 
       - name: Upload driver artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ikey2032-driver
           path: driver/ikey2032_driver.zip
