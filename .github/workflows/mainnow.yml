@@ -13,7 +13,7 @@ jobs:
       - name: Extract MSI contents
         run: |
           mkdir extracted
-          msiexec /a "SafeNetAuthenticationClient.msi" /qb TARGETDIR="extracted"
+          msiexec /a "iKeyDrvr64.msi" /qb TARGETDIR="extracted"
 
       - name: Collect driver files
         run: |
