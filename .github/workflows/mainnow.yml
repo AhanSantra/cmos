@@ -1,27 +1,33 @@
-name: Download iKey 2032 Driver
+name: Extract SafeNet iKey 2032 Driver
 
 on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+  extract-driver:
+    runs-on: windows-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Download iKey 2032 driver
+      - name: Download SafeNet Authentication Client
         run: |
-          mkdir -p driver
-          curl -L "https://cpl.thalesgroup.com/sites/default/files/2021-12/DOW2807.zip" -o driver/ikey2032_driver.zip
+          curl -L -o safenet.zip "https://example.com/safenet_authentication_client.zip"
+          tar -xf safenet.zip
 
-      - name: Verify contents
+      - name: Extract MSI contents
         run: |
-          ls -lh driver
+          mkdir extracted
+          msiexec /a "SafeNetAuthenticationClient.msi" /qb TARGETDIR="extracted"
 
-      - name: Upload driver artifact
+      - name: Find driver files
+        run: |
+          mkdir driver_files
+          Get-ChildItem -Path extracted -Recurse -Include *.inf,*.sys,*.cat | 
+            Copy-Item -Destination driver_files
+
+      - name: Upload driver files
         uses: actions/upload-artifact@v4
         with:
-          name: ikey2032-driver
-          path: driver/ikey2032_driver.zip
+          name: safenet-driver-files
+          path: driver_files
