@@ -1,0 +1,27 @@
+name: Download iKey 2032 Driver
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download iKey 2032 driver
+        run: |
+          mkdir -p driver
+          curl -L "https://cpl.thalesgroup.com/sites/default/files/2021-12/DOW2807.zip" -o driver/ikey2032_driver.zip
+
+      - name: Verify contents
+        run: |
+          ls -lh driver
+
+      - name: Upload driver artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ikey2032-driver
+          path: driver/ikey2032_driver.zip
