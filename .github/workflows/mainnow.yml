@@ -10,20 +10,15 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Download SafeNet Authentication Client
-        run: |
-          curl -L -o safenet.zip "https://example.com/safenet_authentication_client.zip"
-          tar -xf safenet.zip
-
       - name: Extract MSI contents
         run: |
           mkdir extracted
           msiexec /a "SafeNetAuthenticationClient.msi" /qb TARGETDIR="extracted"
 
-      - name: Find driver files
+      - name: Collect driver files
         run: |
           mkdir driver_files
-          Get-ChildItem -Path extracted -Recurse -Include *.inf,*.sys,*.cat | 
+          Get-ChildItem -Path extracted -Recurse -Include *.inf,*.sys,*.cat |
             Copy-Item -Destination driver_files
 
       - name: Upload driver files
