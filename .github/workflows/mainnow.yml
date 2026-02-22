@@ -26,22 +26,28 @@ jobs:
           if (-not $msi) { Write-Error "No MSI file found!" }
           echo "msi=$($msi.FullName)" >> $env:GITHUB_OUTPUT
         shell: powershell
-
+      
       - name: Extract MSI with lessmsi
         run: |
           mkdir extracted
           lessmsi x "${{ steps.findmsi.outputs.msi }}" extracted
         shell: powershell
-
+      
       - name: Zip extracted folder
         run: |
-          Compress-Archive -Path "$PWD\extracted\*" -DestinationPath "$PWD\extracted.zip"
+          $zipPath = Join-Path $env:GITHUB_WORKSPACE "extracted.zip"
+          Compress-Archive -Path "$env:GITHUB_WORKSPACE\extracted\*" -DestinationPath $zipPath -Force
+          if (Test-Path $zipPath) {
+            Write-Host "Zip created successfully at $zipPath"
+          } else {
+            Write-Error "Zip file not found!"
+          }
         shell: powershell
-
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: msi-extracted
-          path: extracted.zip
+          path: ${{ github.workspace }}/extracted.zip
+
 
