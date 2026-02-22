@@ -1,28 +1,45 @@
-name: Extract SafeNet iKey 2032 Driver
+name: Extract MSI and Upload Artifact
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  extract-driver:
+  extract-msi:
     runs-on: windows-latest
+
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Extract MSI contents
+      - name: Install lessmsi
+        run: |
+          choco install lessmsi -y
+        shell: powershell
+
+      - name: Find MSI file
+        id: findmsi
+        run: |
+          $msi = Get-ChildItem -Path . -Filter *.msi | Select-Object -First 1
+          if (-not $msi) { Write-Error "No MSI file found!" }
+          echo "msi=$($msi.FullName)" >> $env:GITHUB_OUTPUT
+        shell: powershell
+
+      - name: Extract MSI with lessmsi
         run: |
           mkdir extracted
-          msiexec /a "iKeyDrvr64.msi" /qb TARGETDIR="extracted"
+          lessmsi x "${{ steps.findmsi.outputs.msi }}" extracted
+        shell: powershell
 
-      - name: Collect driver files
+      - name: Zip extracted folder
         run: |
-          mkdir driver_files
-          Get-ChildItem -Path extracted -Recurse -Include *.inf,*.sys,*.cat |
-            Copy-Item -Destination driver_files
+          Compress-Archive -Path extracted\* -DestinationPath extracted.zip
+        shell: powershell
 
-      - name: Upload driver files
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: safenet-driver-files
-          path: driver_files
+          name: msi-extracted
+          path: extracted.zip
