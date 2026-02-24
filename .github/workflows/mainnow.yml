@@ -35,7 +35,7 @@ jobs:
       
       - name: Zip extracted folder
         run: |
-          Compress-Archive -Path D:\a\a\cmos\extracted -DestinationPath D:\a\a\cmos\extracted.zip
+          Compress-Archive -Path D:\a\cmos\cmos\iKeyDrvr64 -DestinationPath D:\a\a\cmos\extracted.zip
         shell: powershell
 
       - name: Upload artifact
