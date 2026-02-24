@@ -35,13 +35,7 @@ jobs:
       
       - name: Zip extracted folder
         run: |
-          $zipPath = Join-Path $env:GITHUB_WORKSPACE "extracted.zip"
-          Compress-Archive -Path "$env:GITHUB_WORKSPACE\extracted\*" -DestinationPath $zipPath -Force
-          if (Test-Path $zipPath) {
-            Write-Host "Zip created successfully at $zipPath"
-          } else {
-            Write-Error "Zip file not found!"
-          }
+          dir
         shell: powershell
 
       - name: Upload artifact
