@@ -1,4 +1,4 @@
-name: Setup Java Portable
+name: Download Java and Upload Artifact
 
 on:
   workflow_dispatch:
@@ -7,8 +7,17 @@ jobs:
   setup-java:
     runs-on: windows-latest
     steps:
-      - name: Download Temurin JDK 17
+      - name: Download Temurin JDK 17 Portable
         run: |
           curl -L https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.10%2B7/OpenJDK17U-jdk_x64_windows_hotspot_17.0.10_7.zip -o jdk17.zip
-          tar -xf jdk17.zip
-          dir jdk-17.0.10+7
+
+      - name: Extract JDK
+        run: |
+          mkdir jdk17
+          tar -xf jdk17.zip -C jdk17
+
+      - name: Upload JDK as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: jdk17-portable
+          path: jdk17
