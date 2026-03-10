@@ -1,0 +1,14 @@
+name: Setup Java Portable
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup-java:
+    runs-on: windows-latest
+    steps:
+      - name: Download Temurin JDK 17
+        run: |
+          curl -L https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.10%2B7/OpenJDK17U-jdk_x64_windows_hotspot_17.0.10_7.zip -o jdk17.zip
+          tar -xf jdk17.zip
+          dir jdk-17.0.10+7
