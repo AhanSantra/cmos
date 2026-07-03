@@ -1,0 +1,31 @@
+name: Extract and Upload Driver
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  extract-upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout your repository
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      # Ensure unzip / extraction tools are available
+      - name: Install p7zip
+        run: sudo apt-get update && sudo apt-get install -y p7zip-full
+
+      # Extract driver.exe (assuming it’s a self-extracting archive or 7z-compatible)
+      - name: Extract driver.exe
+        run: 7z x Goodix-Fingerprint-Sensor-Driver_MWN7Y_WIN64_40.10.1.130_A08_02.EXE -oextracted_driver
+
+      # Upload extracted files as artifact
+      - name: Upload extracted driver
+        uses: actions/upload-artifact@v4
+        with:
+          name: extracted-driver
+          path: extracted_driver/**
